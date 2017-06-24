@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 
-'''This module filters the packets
+"""This module filters the packets
 in the input file and generates output files
-with packets for seperated by addresants
-using some conditions'''
+with packets seperated by addresants
+using some conditions"""
 
-import sys, os
-
+import sys
+import os
 
 # global constants
 
 # addresant names
-IVAN   = 'Ivan'
+IVAN = 'Ivan'
 DMYTRO = 'Dmytro'
-OSTAP  = 'Ostap'
-LESYA  = 'Lesya'
+OSTAP = 'Ostap'
+LESYA = 'Lesya'
 
 # for Lesya
 END_STR = 'end'
@@ -29,55 +29,54 @@ contacts = (IVAN, DMYTRO, OSTAP, LESYA)
 # it will skip messages for him
 conditions = dict.fromkeys(contacts, lambda x: False)
 
-def check_IVAN(str):
 
-    '''check condition for @str for Ivan and return boolean'''
+def check_IVAN(msg):
+    """check condition for @str for Ivan and return boolean"""
 
-    if str:
-        return len(str) % 2 == 0
+    if msg:
+        return len(msg) % 2 == 0
     return False
 
-def check_DMYTRO(str):
 
-    '''check condition for @str for Dmytro and return boolean'''
+def check_DMYTRO(msg):
+    """check condition for @str for Dmytro and return boolean"""
 
-    if str:
-        return not check_IVAN(str) and str[0].isupper() 
+    if msg:
+        return not check_IVAN(msg) and msg[0].isupper()
     return False
 
-def check_LESYA(str):
 
-    '''check condition for @str for Lesya and return boolean'''
+def check_LESYA(msg):
+    """check condition for @str for Lesya and return boolean"""
 
-    if str:
-        return str.split()[-1] == END_STR
+    if msg:
+        return msg.split()[-1] == END_STR
     return False
 
-def check_OSTAP(str):
 
-    '''check condition for @str for Ostap and return boolean'''
+def check_OSTAP(msg):
+    """check condition for @str for Ostap and return boolean"""
 
-    if str:
-        return not (check_IVAN(str) \
-            or check_DMYTRO(str) \
-            or check_LESYA(str))
+    if msg:
+        return not (check_IVAN(msg)
+                    or check_DMYTRO(msg)
+                    or check_LESYA(msg))
+
 
 def usage():
-
-    '''Output the usage message to user'''
+    """Output the usage message to user"""
 
     print('Usage: {} [path to messages file]'.format(sys.argv[0]))
 
 
 def parse_messages_file(msg_path):
-
-    '''Parses messages file placed in @msg_path 
-    and returns a dictionary of messages 
-    filtred for all adresants'''
+    """Parses messages file placed in @msg_path
+    and returns a dictionary of messages
+    filtred for all adresants"""
 
     # messages dictionary
-    messages = {addr:[] for addr in contacts}
-    
+    messages = {addr: [] for addr in contacts}
+
     # for line without \n
     for line in [x.rstrip('\n') for x in open(msg_path)]:
         for addresant in contacts:
@@ -91,21 +90,20 @@ def parse_messages_file(msg_path):
 
 
 def gen_messages_files(messages):
-
-    '''Generates files by contacts using
-    messages dictionary'''
+    """Generates files by contacts using
+    messages dictionary"""
 
     for contact in messages:
         with open(contact + '.' + OUTPUT_FILE_EXT, 'w') as output_file:
             output_file.write('\n'.join(messages[contact]))
 
-def main():
 
+def main():
     # initializing conditions list
-    conditions['Ivan']   = check_IVAN
+    conditions['Ivan'] = check_IVAN
     conditions['Dmytro'] = check_DMYTRO
-    conditions['Lesya']  = check_LESYA
-    conditions['Ostap']  = check_OSTAP
+    conditions['Lesya'] = check_LESYA
+    conditions['Ostap'] = check_OSTAP
 
     # path to file with packets
     messages_path = ''
@@ -122,6 +120,7 @@ def main():
 
     messages = parse_messages_file(messages_path)
     gen_messages_files(messages)
+
 
 if __name__ == '__main__':
     main()
