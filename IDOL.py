@@ -31,7 +31,7 @@ conditions = dict.fromkeys(contacts, lambda x: False)
 
 
 def check_IVAN(msg):
-    """check condition for @str for Ivan and return boolean"""
+    """check condition for @msg for Ivan and return boolean"""
 
     if msg:
         return len(msg) % 2 == 0
@@ -39,7 +39,7 @@ def check_IVAN(msg):
 
 
 def check_DMYTRO(msg):
-    """check condition for @str for Dmytro and return boolean"""
+    """check condition for @msg for Dmytro and return boolean"""
 
     if msg:
         return not check_IVAN(msg) and msg[0].isupper()
@@ -47,7 +47,7 @@ def check_DMYTRO(msg):
 
 
 def check_LESYA(msg):
-    """check condition for @str for Lesya and return boolean"""
+    """check condition for @msg for Lesya and return boolean"""
 
     if msg:
         return msg.split()[-1] == END_STR
@@ -55,7 +55,7 @@ def check_LESYA(msg):
 
 
 def check_OSTAP(msg):
-    """check condition for @str for Ostap and return boolean"""
+    """check condition for @msg for Ostap and return boolean"""
 
     if msg:
         return not (check_IVAN(msg)
